@@ -3,6 +3,7 @@
 if (localStorage.getItem('data') == null) {
     console.log('resetting data')
     const data = {
+        Raid: [300, 9],
         SicklyRolyPoly: [300, 5],
         RolyPoly: [300,5],
         Moth: [300,5],
@@ -35,6 +36,7 @@ const resetButton = document.getElementById('reset-button')
 
 // put a listener on the buttons
 saveButton.addEventListener('click', SaveData)
+// resetButton.addEventListener('click', LoadData) // can't preventDefault the way this is currently written
 
 // make a function that loads everything, and call it on page load
 LoadData()
@@ -49,9 +51,9 @@ function LoadData(){
         const killDay = document.createElement('td')
 
         label.innerText = creatureName
-        lastKilled.innerText = data[creatureName][0]
-        respawnTime.innerHTML = `<input type="number" name="" id="${creatureName}-respawn" value="${data[creatureName][1]}" min="1" max="9">`
-        killDay.innerHTML = `<input type="text" id="${creatureName}-kill">`
+        lastKilled.innerHTML = `<input type="number" name="" id="${creatureName}-lastkill" value="${data[creatureName][0]}" min="1" max="9999"  style="width:80px">`
+        respawnTime.innerHTML = `<input type="number" name="" id="${creatureName}-respawn" value="${data[creatureName][1]}" min="1" max="9" style="width:100px">`
+        killDay.innerHTML = `<input type="text" id="${creatureName}-kill" value="${data[creatureName][0] + data[creatureName][1]}" style="width:70px">`
         
         newRow.appendChild(label)
         newRow.appendChild(lastKilled)
@@ -69,7 +71,7 @@ function SaveData(e) {
     // id the kill day boxes with the creature name
     // then grab the contents by iterating through the data object for id's
     for (var creatureName of Object.keys(data)) {
-        const day = CheckDay(Number(document.getElementById(`${creatureName}-kill`).value), creatureName)
+        const day = CheckDay(Number(document.getElementById(`${creatureName}-lastkill`).value), creatureName)
         const respawn = Number(document.getElementById(`${creatureName}-respawn`).value)
         
         const list = [day, respawn]
@@ -96,10 +98,13 @@ function SaveData(e) {
 }
 
 function CheckDay(day, creatureName) {
+    // console.log(`CheckDay for ${creatureName}: ${day}`)
     if (day == 0) {
+        // console.log('returning data')
         return data[creatureName][0]
     }
     else {
+        // console.log('returning day')
         return day
     }
 }
