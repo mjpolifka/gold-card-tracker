@@ -79,7 +79,7 @@ function SaveData(e) {
     // id the kill day boxes with the creature name
     // then grab the contents by iterating through the data object for id's
     for (var creatureName of Object.keys(data)) {
-        const day = CheckDay(Number(document.getElementById(`${creatureName}-lastkill`).value), creatureName)
+        const day = CheckDay(Number(document.getElementById(`${creatureName}-lastkill`).value), creatureName) // TODO I don't think CheckDay is needed anymore
         const respawn = Number(document.getElementById(`${creatureName}-respawn`).value)
         
         const list = [day, respawn]
