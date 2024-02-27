@@ -41,6 +41,7 @@ saveButton.addEventListener('click', SaveData)
 // make a function that loads everything, and call it on page load
 LoadData()
 function LoadData(){
+    CreateEmptyTable()
     for (var creatureName of Object.keys(data)) {
         const table = document.querySelector('table')
         const newRow = document.createElement('tr')
@@ -49,16 +50,21 @@ function LoadData(){
         const lastKilled = document.createElement('td')
         const respawnTime = document.createElement('td')
         const killDay = document.createElement('td')
+        const deleteButton = document.createElement('button')
 
         label.innerText = creatureName
         lastKilled.innerHTML = `<input type="number" name="" id="${creatureName}-lastkill" value="${data[creatureName][0]}" min="1" max="9999"  style="width:80px">`
         respawnTime.innerHTML = `<input type="number" name="" id="${creatureName}-respawn" value="${data[creatureName][1]}" min="1" max="9" style="width:100px">`
         killDay.innerHTML = `<input type="text" id="${creatureName}-kill" value="${data[creatureName][0] + data[creatureName][1]}" style="width:70px">`
+        deleteButton.innerText = 'Card Dropped'
+        deleteButton.setAttribute('id', `${creatureName}-delete`)
+        deleteButton.addEventListener('click', DeleteRow)
         
         newRow.appendChild(label)
         newRow.appendChild(lastKilled)
         newRow.appendChild(respawnTime)
         newRow.appendChild(killDay)
+        newRow.appendChild(deleteButton)
         table.appendChild(newRow)
         
         // console.log(creatureName)
@@ -84,15 +90,6 @@ function SaveData(e) {
 
     // delete the contents of the table and re-create it with the new data
     // don't bother trying to find which row you need to replace
-    const table = document.querySelector('table')
-    table.innerHTML = `
-    <tr>
-        <th>Creature</th>
-        <th>Last Killed</th>
-        <th>Respawn Time</th>
-        <th>Kill Day</th>
-    </tr>
-    `
     // and we happen to already have a function that does exactly this job!
     LoadData()
 }
@@ -107,4 +104,25 @@ function CheckDay(day, creatureName) {
         // console.log('returning day')
         return day
     }
+}
+
+function DeleteRow(e) {
+    e.preventDefault()
+    const creatureName = e.currentTarget.id.split('-')[0]
+    // console.log(`target: ${creatureName}`)
+    delete data[creatureName]
+    // localStorage.setItem('data', data)
+    LoadData()
+}
+
+function CreateEmptyTable() {
+    const table = document.querySelector('table')
+    table.innerHTML = `
+    <tr>
+        <th>Creature</th>
+        <th>Last Killed</th>
+        <th>Respawn Time</th>
+        <th>Kill Day</th>
+    </tr>
+    `
 }
