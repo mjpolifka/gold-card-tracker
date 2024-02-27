@@ -33,9 +33,11 @@ const data = JSON.parse(localStorage.getItem('data'))
 // select buttons
 const saveButton = document.getElementById('save-button')
 const resetButton = document.getElementById('reset-button')
+const resetAllButton = document.getElementById('reset-all')
 
 // put a listener on the buttons
 saveButton.addEventListener('click', SaveData)
+resetAllButton.addEventListener('click', ResetData)
 // resetButton.addEventListener('click', LoadData) // can't preventDefault the way this is currently written
 
 // make a function that loads everything, and call it on page load
@@ -94,6 +96,46 @@ function SaveData(e) {
     LoadData()
 }
 
+function DeleteRow(e) {
+    e.preventDefault()
+    const creatureName = e.currentTarget.id.split('-')[0]
+    // console.log(`target: ${creatureName}`)
+    delete data[creatureName]
+    localStorage.setItem('data', JSON.stringify(data))
+    LoadData()
+}
+
+function ResetData(e) {
+    e.preventDefault()
+    console.log('resetting data')
+    const data = {
+        Raid: [300, 9],
+        SicklyRolyPoly: [300, 5],
+        RolyPoly: [300,5],
+        Moth: [300,5],
+        Mosquito: [300,5],
+        TigerMosquito: [300,5],
+        Bombardier: [300,5],
+        OrbWeaverJr: [300,5],
+        InfectedGnat: [300,5],
+        InfectedWolfSpider: [300,5],
+        WaterFlea: [300,5],
+        SpinyWaterFlea: [300,5],
+        FireSoldierAnt: [300,5],
+        LadybirdLarva: [300,5],
+        Ladybird: [300,5],
+        TermiteKing: [300,5],
+        GreenShieldBug: [300,5],
+        BlackWidow: [300,5],
+        BlackWidowling: [300,5],
+        WaspDrone: [300,5],
+        Scarab: [300,5]
+    } 
+    localStorage.setItem('data', JSON.stringify(data))
+
+    LoadData()
+}
+
 function CheckDay(day, creatureName) {
     // console.log(`CheckDay for ${creatureName}: ${day}`)
     if (day == 0) {
@@ -106,14 +148,6 @@ function CheckDay(day, creatureName) {
     }
 }
 
-function DeleteRow(e) {
-    e.preventDefault()
-    const creatureName = e.currentTarget.id.split('-')[0]
-    // console.log(`target: ${creatureName}`)
-    delete data[creatureName]
-    // localStorage.setItem('data', data)
-    LoadData()
-}
 
 function CreateEmptyTable() {
     const table = document.querySelector('table')
